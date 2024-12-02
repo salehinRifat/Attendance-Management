@@ -185,9 +185,9 @@ public class AttendanceFrame extends javax.swing.JFrame {
         });
         jPanel3.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 120, 40));
 
-        jLabel5.setFont(new java.awt.Font("Tw Cen MT", 0, 18)); // NOI18N
-        jLabel5.setText("TEACHER");
-        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
+        jLabel5.setFont(new java.awt.Font("Tw Cen MT", 0, 15)); // NOI18N
+        jLabel5.setText("TEACHER Planel");
+        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, -1, -1));
 
         jButton5.setBackground(new java.awt.Color(235, 211, 248));
         jButton5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -380,34 +380,49 @@ public class AttendanceFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_tableMouseClicked
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+// TODO add your handling code here:
         if (selectedRowIndex != -1) {
             // Get the ID of the selected row
             String id1 = table.getValueAt(selectedRowIndex, 0).toString();
 
-            try {
-                // Prepare and execute the DELETE query
-                pst = con.prepareStatement("DELETE FROM stu_info WHERE ID = ?");
-                pst.setString(1, id1);
-                pst.executeUpdate();
-                
-                pst = con.prepareStatement("DELETE FROM stu_atten WHERE ID = ?");
-                pst.setString(1, id1);
-                pst.executeUpdate();
+            // Show a confirmation dialog
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to delete this record?",
+                    "Confirm Deletion",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+            );
 
-                // Show a confirmation message
-                JOptionPane.showMessageDialog(this, "Info deleted successfully!");
+            if (confirm == JOptionPane.OK_OPTION) {
+                try {
+                    // Prepare and execute the DELETE query
+                    pst = con.prepareStatement("DELETE FROM stu_info WHERE ID = ?");
+                    pst.setString(1, id1);
+                    pst.executeUpdate();
 
-                // Refresh the table data
-                table_input();
-            } catch (SQLException ex) {
-                Logger.getLogger(AttendanceFrame.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, "Error while deleting record: " + ex.getMessage());
+                    pst = con.prepareStatement("DELETE FROM stu_atten WHERE ID = ?");
+                    pst.setString(1, id1);
+                    pst.executeUpdate();
+
+                    // Show a confirmation message
+                    JOptionPane.showMessageDialog(this, "Info deleted successfully!");
+
+                    // Refresh the table data
+                    table_input();
+                } catch (SQLException ex) {
+                    Logger.getLogger(AttendanceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(this, "Error while deleting record: " + ex.getMessage());
+                }
+            } else {
+                // If user selects "Cancel", do nothing
+                JOptionPane.showMessageDialog(this, "Deletion cancelled.");
             }
         } else {
             // If no row is selected, show a warning
             JOptionPane.showMessageDialog(this, "Please select a row to delete!");
         }
+
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**

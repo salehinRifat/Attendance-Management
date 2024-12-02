@@ -21,9 +21,7 @@ public class reportFrame extends javax.swing.JFrame {
     Connection con;
     PreparedStatement pst;
 
-    /**
-     * Creates new form reportFrame
-     */
+    
     public reportFrame() {
         initComponents();
         connect();
